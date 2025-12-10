@@ -1,0 +1,114 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>49d33e8b-45d7-4f51-8309-326b0261e98a</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>data_imports_project</Name>
+    <RootNamespace>data_imports_project</RootNamespace>
+    <TestFramework>Pytest</TestFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="csv_files\" />
+    <Folder Include="dictionaries\" />
+    <Folder Include="dictionaries\__pycache__\" />
+    <Folder Include="geodata\" />
+    <Folder Include="geodata\__pycache__\" />
+    <Folder Include="imports\" />
+    <Folder Include="imports\__pycache__\" />
+    <Folder Include="main_data\" />
+    <Folder Include="main_data\__pycache__\" />
+    <Folder Include="__pycache__\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="csv_files\Cleanup_Excel_Ver_with VBA.xlsm" />
+    <Content Include="csv_files\fire_stations.csv" />
+    <Content Include="csv_files\Regions_20251124_101719.csv" />
+    <Content Include="csv_files\Regions_FieldNames.csv" />
+    <Content Include="csv_files\Regions_Suburbs_20251124_102945.csv" />
+    <Content Include="csv_files\Regions_Suburbs_Nearest.csv" />
+    <Content Include="csv_files\Region_to_Suburb.csv" />
+    <Content Include="csv_files\Shapefile_FieldNames.csv" />
+    <Content Include="csv_files\Suburb_to_FireStation.csv" />
+    <Content Include="csv_files\Suburb_to_Region.csv" />
+    <Content Include="geodata\Fire_Stations.cpg" />
+    <Content Include="geodata\Fire_Stations.dbf" />
+    <Content Include="geodata\Fire_Stations.prj" />
+    <Content Include="geodata\Fire_Stations.shp" />
+    <Content Include="geodata\Fire_Stations.shx" />
+    <Content Include="geodata\Fire_Stations.xml" />
+    <Content Include="geodata\Regions.cpg" />
+    <Content Include="geodata\Regions.dbf" />
+    <Content Include="geodata\Regions.prj" />
+    <Content Include="geodata\Regions.shp" />
+    <Content Include="geodata\Regions.shx" />
+    <Content Include="geodata\Regions.xml" />
+    <Content Include="geodata\Regions_to_Suburbs" />
+    <Content Include="geodata\Regions_to_Suburbs_Nearest" />
+    <Content Include="geodata\Suburbs.cpg" />
+    <Content Include="geodata\Suburbs.dbf" />
+    <Content Include="geodata\Suburbs.prj" />
+    <Content Include="geodata\Suburbs.shp" />
+    <Content Include="geodata\Suburbs.shx" />
+    <Content Include="geodata\Suburbs.xml" />
+    <Content Include="geodata\__pycache__\config.cpython-311.pyc" />
+    <Content Include="imports\__pycache__\config.cpython-311.pyc" />
+    <Content Include="imports\__pycache__\data_importer.cpython-311.pyc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="dictionaries\categories.py" />
+    <Compile Include="dictionaries\streets.py" />
+    <Compile Include="dictionaries\suburbs.py" />
+    <Compile Include="dictionaries\suburb_centroids.py" />
+    <Compile Include="dictionaries\__init__.py" />
+    <Compile Include="geodata\Fire_Stations.py" />
+    <Compile Include="geodata\Regions_to_Suburbs_Cleanup.py" />
+    <Compile Include="geodata\Suburb_to_FireStation.py" />
+    <Compile Include="imports\checkconfig.py" />
+    <Compile Include="imports\CleanRegions.py" />
+    <Compile Include="imports\config.py" />
+    <Compile Include="imports\data_importer.py" />
+    <Compile Include="imports\extract_names.py" />
+    <Compile Include="imports\Import_fire_Station.py" />
+    <Compile Include="imports\import_runner.py" />
+    <Compile Include="imports\Regions_to_Suburb.py" />
+    <Compile Include="main_data\add_Streets_Data.py" />
+    <Compile Include="main_data\cleaning_logic.py" />
+    <Compile Include="main_data\cleanup_incidents.py" />
+    <Compile Include="main_data\config.py" />
+    <Compile Include="main_data\data_cleanup.py" />
+    <Compile Include="main_data\data_generator.py" />
+    <Compile Include="main_data\generate_data.py" />
+    <Compile Include="main_data\generate_errors.py" />
+    <Compile Include="main_data\gui_builder.py" />
+    <Compile Include="main_data\Imports_excel.py" />
+    <Compile Include="main_data\import_csv.py" />
+    <Compile Include="main_data\view_Streets.py" />
+    <Compile Include="main_data\__init__.py" />
+    <Compile Include="main_data\test_cleaning_logic.py" />
+    <Compile Include="__init__.py" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

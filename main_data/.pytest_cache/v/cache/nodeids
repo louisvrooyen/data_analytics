@@ -1,0 +1,11 @@
+[
+  "test_cleaning_logic.py::test_clean_text_pipeline_basic",
+  "test_cleaning_logic.py::test_fix_suffixes_basic",
+  "test_cleaning_logic.py::test_mixed_case_and_symbols",
+  "test_cleaning_logic.py::test_multiple_suffixes_in_one_string",
+  "test_cleaning_logic.py::test_ordinals",
+  "test_cleaning_logic.py::test_proper_case",
+  "test_cleaning_logic.py::test_replace_symbols_basic",
+  "test_cleaning_logic.py::test_special_characters",
+  "test_cleaning_logic.py::test_suffix_not_in_map"
+]

@@ -1,0 +1,56 @@
+import geopandas as gpd
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+from datetime import datetime
+
+# --- Config ---
+FILENAME = r"D:\Python\DataImports\GeoData\Regions.shp"
+SUBURB_Shapefile = r"D:\Python\DataImports\GeoData\Suburbs.shp"
+EXPORT_PATH = r"D:\Python\DataImports\CSV_Files"
+EXPORT_FILENAME_MATCH = f"Regions_Suburbs_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+
+# --- Step 1: Check paths ---
+for path in [FILENAME, SUBURB_Shapefile]:
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"File not found: {path}")
+
+print(f"Reading shapefiles:\n - {FILENAME}\n - {SUBURB_Shapefile}")
+
+# --- Step 2: Read shapefiles ---
+regions = gpd.read_file(FILENAME).to_crs(epsg=32735)   # project to UTM for accuracy
+suburbs = gpd.read_file(SUBURB_Shapefile).to_crs(epsg=32735)
+
+# --- Step 3: Spatial join (assign region to each suburb) ---
+suburbs_in_regions = gpd.sjoin(suburbs, regions, how="left", predicate="within")
+
+# --- Step 4: Add centroid Lat/Lon for suburbs ---
+suburbs_in_regions["centroid"] = suburbs_in_regions.geometry.centroid
+suburbs_in_regions = suburbs_in_regions.set_geometry("centroid").to_crs(epsg=4326)
+suburbs_in_regions["Longitude"] = suburbs_in_regions.geometry.x.round(6)
+suburbs_in_regions["Latitude"] = suburbs_in_regions.geometry.y.round(6)
+
+# --- Step 5: Prepare export ---
+suburbs_in_regions["geometry_wkt"] = suburbs_in_regions["geometry"].apply(lambda g: g.wkt)
+export_df = suburbs_in_regions.drop(columns="geometry")
+
+# --- Step 6: Delete older CSV if exists ---
+full_csv = os.path.join(EXPORT_PATH, EXPORT_FILENAME_MATCH)
+if os.path.exists(full_csv):
+    os.remove(full_csv)
+
+# --- Step 7: Export to CSV ---
+export_df.to_csv(full_csv, index=False)
+print(f"\nRegions-Suburbs lookup exported to: {full_csv}")
+
+# --- Step 8: Plot map ---
+fig, ax = plt.subplots(figsize=(12, 10))
+regions.to_crs(epsg=4326).plot(ax=ax, color="lightgrey", edgecolor="black", linewidth=0.5, alpha=0.5)
+suburbs.to_crs(epsg=4326).plot(ax=ax, color="none", edgecolor="blue", linewidth=0.8)
+suburbs_in_regions.plot(ax=ax, markersize=10, color="red", label="Suburb Centroids")
+
+plt.title("Regions–Suburbs Map", fontsize=14)
+plt.legend()
+plt.show()
+
+print("\nMap displayed successfully.")

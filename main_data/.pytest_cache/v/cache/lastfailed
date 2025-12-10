@@ -1,0 +1,4 @@
+{
+  "test_cleaning_logic.py::test_mixed_case_and_symbols": true,
+  "test_cleaning_logic.py::test_special_characters": true
+}

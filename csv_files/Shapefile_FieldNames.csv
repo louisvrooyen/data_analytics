@@ -1,0 +1,6 @@
+Suburb_Fields,Station_Fields
+OBJECTID,OBJECTID
+OFC_SBRB_N,FIRE_STN_N
+Shape__Are,FIRE_STN_C
+Shape__Len,FIRE_STN_1
+geometry,geometry
