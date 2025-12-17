@@ -78,4 +78,4 @@ def update_random_streets(batch_size=200):
     print(f"🎯 All batches done. Total rows updated: {total_updated} (expected {incident_count})")
 
 if __name__ == "__main__":
-    update_random_streets(batch_size=200)
+    update_random_streets(batch_size=300)

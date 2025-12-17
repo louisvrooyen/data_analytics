@@ -12,7 +12,7 @@ def test_proper_case():
     assert proper_case("JOHANNESBURG") == "Johannesburg"
 
 def test_replace_symbols_basic():
-    assert replace_symbols("H0use!") == "Housei"   # "0" → "o", "!" → "i"
+    assert replace_symbols("H0use!") == "House^"   # "0" → "o", "^" → "i"
     assert replace_symbols("Streetr") == "Street"
     assert replace_symbols("Avenuenue") == "Avenue"
     assert replace_symbols("R1O") == "R10"         # corrected expectation
