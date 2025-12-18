@@ -26,6 +26,7 @@
     <Folder Include="csv_files\" />
     <Folder Include="dictionaries\" />
     <Folder Include="dictionaries\__pycache__\" />
+    <Folder Include="exe\" />
     <Folder Include="geodata\" />
     <Folder Include="geodata\__pycache__\" />
     <Folder Include="imports\" />
@@ -90,6 +91,7 @@
     <Compile Include="main_data\cleaning_logic.py" />
     <Compile Include="main_data\cleanup_incidents.py" />
     <Compile Include="main_data\config.py" />
+    <Compile Include="main_data\dashboard.py" />
     <Compile Include="main_data\data_cleanup.py" />
     <Compile Include="main_data\data_generator.py" />
     <Compile Include="main_data\generate_data.py" />
