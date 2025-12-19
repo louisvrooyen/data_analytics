@@ -1,0 +1,151 @@
+Option Explicit
+
+' ==========================================================
+'  ENTRY POINT — SP-ALIGNED CLEANING ENGINE
+'  Includes:
+'   - Per-phase counters
+'   - Execution timing
+'   - Logging to "Clean_Log"
+'   - Dual popups (user-friendly + SP-style)
+' ==========================================================
+Public Sub CleanInExcel_FromSP()
+
+    Dim ws As Worksheet
+    Dim tbl As ListObject
+    Dim r As ListRow
+    Dim t0 As Double, t1 As Double
+    Dim phaseMsg As String
+    
+    Dim p1 As Long, p2 As Long, p3 As Long
+    Dim p4 As Long, p5 As Long, p6 As Long, p7 As Long
+    
+    t0 = Timer
+    
+    Set ws = ThisWorkbook.Sheets("Clean_Excel")
+    Set tbl = ws.ListObjects("Clean_Excel")
+    
+    ' ======================================================
+    ' PHASE 1 — SYMBOL CLEANUP
+    ' ======================================================
+    For Each r In tbl.ListRows
+        With r.Range
+            p1 = p1 + ApplyPhase(.Columns(tbl.ListColumns("Str_Name").Index), AddressOf Phase1_SymbolCleanup)
+            p1 = p1 + ApplyPhase(.Columns(tbl.ListColumns("Suburb").Index), AddressOf Phase1_SymbolCleanup)
+        End With
+    Next r
+    
+    ' ======================================================
+    ' PHASE 2 — SUFFIX EXPANSION (Str_Name only)
+    ' ======================================================
+    For Each r In tbl.ListRows
+        p2 = p2 + ApplyPhase(r.Range.Columns(tbl.ListColumns("Str_Name").Index), AddressOf Phase2_SuffixExpansion)
+    Next r
+    
+    ' ======================================================
+    ' PHASE 3 — PROPER CASE
+    ' ======================================================
+    For Each r In tbl.ListRows
+        With r.Range
+            p3 = p3 + ApplyPhase(.Columns(tbl.ListColumns("Str_Name").Index), AddressOf Phase3_ProperCase)
+            p3 = p3 + ApplyPhase(.Columns(tbl.ListColumns("Suburb").Index), AddressOf Phase3_ProperCase)
+        End With
+    Next r
+    
+    ' ======================================================
+    ' PHASE 4 — PREFIX FIXES
+    ' ======================================================
+    For Each r In tbl.ListRows
+        p4 = p4 + ApplyPhase(r.Range.Columns(tbl.ListColumns("Str_Name").Index), AddressOf Phase4_PrefixFixes)
+    Next r
+    
+    ' ======================================================
+    ' PHASE 5 — LITERAL FUNNIES
+    ' ======================================================
+    For Each r In tbl.ListRows
+        p5 = p5 + ApplyPhase(r.Range.Columns(tbl.ListColumns("Str_Name").Index), AddressOf Phase5_LiteralFunnies)
+    Next r
+    
+    ' ======================================================
+    ' PHASE 6 — ORDINAL FIXES
+    ' ======================================================
+    For Each r In tbl.ListRows
+        p6 = p6 + ApplyPhase(r.Range.Columns(tbl.ListColumns("Str_Name").Index), AddressOf Phase6_OrdinalFixes)
+    Next r
+    
+    ' ======================================================
+    ' PHASE 7 — SUBURB ANOMALIES
+    ' ======================================================
+    For Each r In tbl.ListRows
+        p7 = p7 + ApplyPhase(r.Range.Columns(tbl.ListColumns("Suburb").Index), AddressOf Phase7_SuburbAnomalies)
+    Next r
+    
+    t1 = Timer
+    
+    ' ======================================================
+    ' LOG RESULTS
+    ' ======================================================
+    LogCleaningRun p1, p2, p3, p4, p5, p6, p7, (t1 - t0)
+    
+    ' ======================================================
+    ' POPUPS
+    ' ======================================================
+    MsgBox "Cleaning complete: Symbols replaced, Proper Case applied, suffixes standardized.", vbInformation
+    
+    phaseMsg = _
+        "Cleaning complete (SP-aligned)." & vbCrLf & vbCrLf & _
+        "Phase 1 – Symbols: " & p1 & vbCrLf & _
+        "Phase 2 – Suffixes: " & p2 & vbCrLf & _
+        "Phase 3 – ProperCase: " & p3 & vbCrLf & _
+        "Phase 4 – Prefixes: " & p4 & vbCrLf & _
+        "Phase 5 – Literal fixes: " & p5 & vbCrLf & _
+        "Phase 6 – Ordinals: " & p6 & vbCrLf & _
+        "Phase 7 – Suburb anomalies: " & p7 & vbCrLf & vbCrLf & _
+        "Execution time: " & Format(t1 - t0, "0.00") & " seconds."
+    
+    MsgBox phaseMsg, vbInformation, "MySQL SP Logic Applied"
+    
+ End Function
+
+Private Function ApplyPhase(cell As Range, fn As LongPtr) As Long
+    Dim oldVal As String, newVal As String
+    oldVal = CStr(cell.Value)
+    newVal = CallByName(Me, VBA.Strings.Mid$(VBA.Strings.StrPtr(fn), 1), VbMethod, oldVal)
+    
+    If newVal <> oldVal Then
+        cell.Value = newVal
+        ApplyPhase = 1
+    Else
+        ApplyPhase = 0
+    End If
+End Function
+
+Private Sub LogCleaningRun(p1 As Long, p2 As Long, p3 As Long, _
+                           p4 As Long, p5 As Long, p6 As Long, p7 As Long, _
+                           seconds As Double)
+
+    Dim ws As Worksheet
+    Dim nextRow As Long
+    
+    On Error Resume Next
+    Set ws = ThisWorkbook.Sheets("Clean_Log")
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Sheets.Add
+        ws.Name = "Clean_Log"
+        ws.Range("A1:H1").Value = Array("Timestamp", "Phase1", "Phase2", "Phase3", "Phase4", "Phase5", "Phase6", "Phase7")
+    End If
+    On Error GoTo 0
+    
+    nextRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row + 1
+    
+    ws.Cells(nextRow, 1).Value = Now
+    ws.Cells(nextRow, 2).Value = p1
+    ws.Cells(nextRow, 3).Value = p2
+    ws.Cells(nextRow, 4).Value = p3
+    ws.Cells(nextRow, 5).Value = p4
+    ws.Cells(nextRow, 6).Value = p5
+    ws.Cells(nextRow, 7).Value = p6
+    ws.Cells(nextRow, 8).Value = p7
+    ws.Cells(nextRow, 9).Value = seconds
+
+End Sub
+

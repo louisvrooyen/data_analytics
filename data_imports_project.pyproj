@@ -24,6 +24,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="csv_files\" />
+    <Folder Include="csv_files\Excel Stuff\" />
+    <Folder Include="csv_files\SQL Stuff\" />
     <Folder Include="dictionaries\" />
     <Folder Include="dictionaries\__pycache__\" />
     <Folder Include="exe\" />
@@ -33,10 +35,12 @@
     <Folder Include="imports\__pycache__\" />
     <Folder Include="main_data\" />
     <Folder Include="main_data\__pycache__\" />
+    <Folder Include="Images\" />
     <Folder Include="__pycache__\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="csv_files\Cleanup_Excel_Ver_with VBA.xlsm" />
+    <Content Include="csv_files\Excel Stuff\VBA_Cleanup Script.txt" />
     <Content Include="csv_files\fire_stations.csv" />
     <Content Include="csv_files\Regions_20251124_101719.csv" />
     <Content Include="csv_files\Regions_FieldNames.csv" />
@@ -44,6 +48,11 @@
     <Content Include="csv_files\Regions_Suburbs_Nearest.csv" />
     <Content Include="csv_files\Region_to_Suburb.csv" />
     <Content Include="csv_files\Shapefile_FieldNames.csv" />
+    <Content Include="csv_files\SQL Stuff\Cleanup_SP - Copy.txt" />
+    <Content Include="csv_files\SQL Stuff\Cleanup_SP.sql" />
+    <Content Include="csv_files\SQL Stuff\Cleanup_SQL_Ver 2.sql" />
+    <Content Include="csv_files\SQL Stuff\dataimport.sql" />
+    <Content Include="csv_files\SQL Stuff\Execute SP.sql" />
     <Content Include="csv_files\Suburb_to_FireStation.csv" />
     <Content Include="csv_files\Suburb_to_Region.csv" />
     <Content Include="geodata\Fire_Stations.cpg" />
@@ -67,8 +76,10 @@
     <Content Include="geodata\Suburbs.shx" />
     <Content Include="geodata\Suburbs.xml" />
     <Content Include="geodata\__pycache__\config.cpython-311.pyc" />
+    <Content Include="Images\dashboard.ico" />
     <Content Include="imports\__pycache__\config.cpython-311.pyc" />
     <Content Include="imports\__pycache__\data_importer.cpython-311.pyc" />
+    <Content Include="version_info.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="dictionaries\categories.py" />
@@ -88,10 +99,10 @@
     <Compile Include="imports\import_runner.py" />
     <Compile Include="imports\Regions_to_Suburb.py" />
     <Compile Include="main_data\add_Streets_Data.py" />
+    <Compile Include="build_launcher.py" />
     <Compile Include="main_data\cleaning_logic.py" />
     <Compile Include="main_data\cleanup_incidents.py" />
     <Compile Include="main_data\config.py" />
-    <Compile Include="main_data\dashboard.py" />
     <Compile Include="main_data\data_cleanup.py" />
     <Compile Include="main_data\data_generator.py" />
     <Compile Include="main_data\generate_data.py" />
@@ -99,6 +110,7 @@
     <Compile Include="main_data\gui_builder.py" />
     <Compile Include="main_data\Imports_excel.py" />
     <Compile Include="main_data\import_csv.py" />
+    <Compile Include="main_data\main_launcher.py" />
     <Compile Include="main_data\view_Streets.py" />
     <Compile Include="main_data\__init__.py" />
     <Compile Include="main_data\test_cleaning_logic.py" />

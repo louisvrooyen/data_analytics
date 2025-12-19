@@ -1,0 +1,19 @@
+[2025-12-19 15:45:58] Old EXE deleted.
+[2025-12-19 15:49:33] No previous EXE found.
+[2025-12-19 15:49:33] Version updated: 1.0.4 -> 1.0.5
+[2025-12-19 15:49:36] PyInstaller failed: Command '['E:\\Python\\python.exe', '-m', 'PyInstaller', '--onefile', '--noconsole', '--name', 'Dashboard', '--icon', 'D:\\Python\\data_imports_project\\Images\\dashboard.ico', '--version-file', 'D:\\Python\\data_imports_project\\version_info.txt', 'D:\\Python\\data_imports_project\\main_data\\main_launcher.py']' returned non-zero exit status 1.
+[2025-12-19 15:52:41] No previous EXE found.
+[2025-12-19 15:52:41] Version updated: 1.0.5 -> 1.0.6
+[2025-12-19 15:52:56] PyInstaller failed: Command '['E:\\Python\\python.exe', '-m', 'PyInstaller', '--onefile', '--noconsole', '--name', 'Dashboard', '--icon', 'D:\\Python\\data_imports_project\\Images\\dashboard.ico', '--version-file', 'D:\\Python\\data_imports_project\\version_info.txt', 'D:\\Python\\data_imports_project\\main_data\\main_launcher.py']' returned non-zero exit status 1.
+[2025-12-19 15:54:42] No previous EXE found.
+[2025-12-19 15:54:42] Version updated: 1.0.6 -> 1.0.7
+[2025-12-19 15:54:49] PyInstaller failed: Command '['E:\\Python\\python.exe', '-m', 'PyInstaller', '--onefile', '--noconsole', '--name', 'Dashboard', '--icon', 'D:\\Python\\data_imports_project\\Images\\dashboard.ico', '--version-file', 'D:\\Python\\data_imports_project\\version_info.txt', 'D:\\Python\\data_imports_project\\main_data\\main_launcher.py']' returned non-zero exit status 1.
+[2025-12-19 15:56:07] No previous EXE found.
+[2025-12-19 15:56:07] Version updated: 1.0.7 -> 1.0.8
+[2025-12-19 15:56:13] PyInstaller failed: Command '['E:\\Python\\python.exe', '-m', 'PyInstaller', '--onefile', '--noconsole', '--name', 'Dashboard', '--icon', 'D:\\Python\\data_imports_project\\Images\\dashboard.ico', '--version-file', 'D:\\Python\\data_imports_project\\version_info.txt', 'D:\\Python\\data_imports_project\\main_data\\main_launcher.py']' returned non-zero exit status 1.
+[2025-12-19 15:57:06] No previous EXE found.
+[2025-12-19 15:57:06] Version updated: 1.0.8 -> 1.0.9
+[2025-12-19 15:57:13] PyInstaller failed: Command '['E:\\Python\\python.exe', '-m', 'PyInstaller', '--onefile', '--noconsole', '--name', 'Dashboard', '--icon', 'D:\\Python\\data_imports_project\\Images\\dashboard.ico', '--version-file', 'D:\\Python\\data_imports_project\\version_info.txt', 'D:\\Python\\data_imports_project\\main_data\\main_launcher.py']' returned non-zero exit status 1.
+[2025-12-19 16:02:13] No previous EXE found.
+[2025-12-19 16:02:13] Version updated: 1.0.9 -> 1.0.10
+[2025-12-19 16:02:47] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe
