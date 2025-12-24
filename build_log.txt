@@ -17,3 +17,34 @@
 [2025-12-19 16:02:13] No previous EXE found.
 [2025-12-19 16:02:13] Version updated: 1.0.9 -> 1.0.10
 [2025-12-19 16:02:47] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe
+[2025-12-19 16:09:08] Old EXE deleted.
+[2025-12-19 16:09:08] Version updated: 1.0.10 -> 1.0.11
+[2025-12-19 16:09:24] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe
+[2025-12-19 19:32:19] Old EXE deleted.
+[2025-12-19 19:32:19] Version updated: 1.0.11 -> 1.0.12
+[2025-12-19 19:32:46] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe
+[2025-12-23 14:41:51] Failed to delete old EXE: [WinError 5] Access is denied: 'D:\\Python\\data_imports_project\\exe\\Dashboard.exe'
+[2025-12-23 14:42:50] Failed to delete old EXE: [WinError 5] Access is denied: 'D:\\Python\\data_imports_project\\exe\\Dashboard.exe'
+[2025-12-23 14:43:36] Failed to delete old EXE: [WinError 5] Access is denied: 'D:\\Python\\data_imports_project\\exe\\Dashboard.exe'
+[2025-12-23 14:45:02] Failed to delete old EXE: [WinError 5] Access is denied: 'D:\\Python\\data_imports_project\\exe\\Dashboard.exe'
+[2025-12-23 14:45:50] Old EXE deleted.
+[2025-12-23 14:45:50] Version updated: 1.0.12 -> 1.0.13
+[2025-12-23 14:46:27] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe
+[2025-12-23 14:53:24] Old EXE deleted.
+[2025-12-23 14:53:24] Version updated: 1.0.13 -> 1.0.14
+[2025-12-23 14:53:39] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe
+[2025-12-23 14:55:39] Old EXE deleted.
+[2025-12-23 14:55:39] Version updated: 1.0.14 -> 1.0.15
+[2025-12-23 14:55:42] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe
+[2025-12-23 15:01:25] Old EXE deleted.
+[2025-12-23 15:01:25] Version updated: 1.0.15 -> 1.0.16
+[2025-12-23 15:01:32] PyInstaller failed: Command '['E:\\Python\\python.exe', '-m', 'PyInstaller', '--onefile', '--noconsole', '--name', 'Dashboard', '--icon', 'D:\\Python\\data_imports_project\\Images\\dashboard.ico', '--version-file', 'D:\\Python\\data_imports_project\\version_info.txt', 'D:\\Python\\data_imports_project\\main_data\\main_launcher.py']' returned non-zero exit status 1.
+[2025-12-23 15:01:48] No previous EXE found.
+[2025-12-23 15:01:48] Version updated: 1.0.16 -> 1.0.17
+[2025-12-23 15:01:55] PyInstaller failed: Command '['E:\\Python\\python.exe', '-m', 'PyInstaller', '--onefile', '--noconsole', '--name', 'Dashboard', '--icon', 'D:\\Python\\data_imports_project\\Images\\dashboard.ico', '--version-file', 'D:\\Python\\data_imports_project\\version_info.txt', 'D:\\Python\\data_imports_project\\main_data\\main_launcher.py']' returned non-zero exit status 1.
+[2025-12-23 15:02:31] No previous EXE found.
+[2025-12-23 15:02:31] Version updated: 1.0.17 -> 1.0.18
+[2025-12-23 15:02:45] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe
+[2025-12-23 15:06:12] Old EXE deleted.
+[2025-12-23 15:06:12] Version updated: 1.0.18 -> 1.0.19
+[2025-12-23 15:06:27] New EXE created at: D:\Python\data_imports_project\exe\Dashboard.exe

@@ -101,6 +101,8 @@
     <Compile Include="main_data\add_Streets_Data.py" />
     <Compile Include="build_launcher.py" />
     <Compile Include="main_data\cleaning_logic.py" />
+    <Compile Include="main_data\cleanup_checks.py" />
+    <Compile Include="main_data\cleanup_gui.py" />
     <Compile Include="main_data\cleanup_incidents.py" />
     <Compile Include="main_data\config.py" />
     <Compile Include="main_data\data_cleanup.py" />
@@ -111,6 +113,7 @@
     <Compile Include="main_data\Imports_excel.py" />
     <Compile Include="main_data\import_csv.py" />
     <Compile Include="main_data\main_launcher.py" />
+    <Compile Include="main_data\test_cleanup.py" />
     <Compile Include="main_data\view_Streets.py" />
     <Compile Include="main_data\__init__.py" />
     <Compile Include="main_data\test_cleaning_logic.py" />

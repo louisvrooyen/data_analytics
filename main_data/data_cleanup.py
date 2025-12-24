@@ -1,47 +1,87 @@
+# data_cleanup.py
+
 import pandas as pd
 import sqlalchemy
-from sqlalchemy import create_engine
-from cleaning_logic import clean_text  # <-- import from separate file
+from sqlalchemy import create_engine, text as sql_text
+import sys
 
-# === CONFIGURATION ===
-DB_USER = 'root'
-DB_PASSWORD = 'Qwedcxzao0)16'
-DB_HOST = 'localhost'
-DB_NAME = 'incidents'
-TABLE_NAME = 'incident_records'
-TARGET_COLUMNS = ['Str_Name', 'Suburb']
+from cleaning_logic import (
+    clean_str_name,
+    clean_suburb,
+    ANSI_CYAN,
+    ANSI_RED,
+    ANSI_RESET
+)
 
-# === SQLAlchemy ENGINE ===
-engine = create_engine(f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
 
-print(f"🔧 SQLAlchemy version: {sqlalchemy.__version__}")
+DB_USER = "root"
+DB_PASSWORD = "Qwedcxzao0)16"
+DB_HOST = "localhost"
+DB_NAME = "incidents"
+TABLE_NAME = "incident_records"
 
-# === LOAD DATA FROM MYSQL ===
-df = pd.read_sql(f"SELECT * FROM `{TABLE_NAME}`", engine)
-print(f"📄 Loaded {len(df)} records from `{TABLE_NAME}`.")
+engine = create_engine(
+    f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}",
+    pool_pre_ping=True
+)
 
-# === BEFORE PREVIEW ===
-print("\n🔎 BEFORE CLEANUP (first 5 rows):")
-print(df[TARGET_COLUMNS].head())
+def main():
+    print(f"{ANSI_CYAN}Using SQLAlchemy {sqlalchemy.__version__}{ANSI_RESET:=^60}")
 
-# === APPLY CLEANUP ===
-for col in TARGET_COLUMNS:
-    if col in df.columns:
-        df[col] = df[col].apply(clean_text)
+    try:
+        df = pd.read_sql(f"SELECT * FROM `{TABLE_NAME}`", engine)
+        print(f"{ANSI_CYAN}Loaded {len(df)} rows from `{TABLE_NAME}`{ANSI_RESET}")
+    except Exception as e:
+        print(f"{ANSI_RED}Failed to load data: {e}{ANSI_RESET}")
+        sys.exit(1)
 
-# === AFTER PREVIEW ===
-print("\n✨ AFTER CLEANUP (first 5 rows):")
-print(df[TARGET_COLUMNS].head())
+    col_map = {c.lower(): c for c in df.columns}
+    str_col = col_map.get("str_name")
+    suburb_col = col_map.get("suburb")
 
-# === TRUNCATE TABLE FIRST (raw DBAPI) ===
-raw_conn = engine.raw_connection()
-cur = raw_conn.cursor()
-cur.execute(f"TRUNCATE TABLE `{TABLE_NAME}`")
-raw_conn.commit()
-cur.close()
-raw_conn.close()
-print(f"🧹 Table `{TABLE_NAME}` truncated.")
+    if not str_col:
+        print(f"{ANSI_RED}WARNING: No 'Str_Name' column found (case-insensitive).{ANSI_RESET}")
+    if not suburb_col:
+        print(f"{ANSI_RED}WARNING: No 'Suburb' column found (case-insensitive).{ANSI_RESET}")
 
-# === BULK INSERT CLEANED DATA ===
-df.to_sql(TABLE_NAME, engine, if_exists='append', index=False)
-print(f"\n✅ Bulk inserted {len(df)} cleaned records into `{TABLE_NAME}`.")
+    print(f"{ANSI_CYAN}Preview BEFORE cleanup:{ANSI_RESET}")
+    preview_cols = [c for c in [str_col, suburb_col] if c]
+    if preview_cols:
+        print(df[preview_cols].head().to_string())
+        print()
+
+    # Full debug for ALL rows
+    total = len(df)
+    for idx in range(total):
+        print(f"{ANSI_CYAN}================ ROW {idx+1}/{total} ================ {ANSI_RESET}")
+        if str_col:
+            original = df.at[idx, str_col]
+            print(f"{ANSI_CYAN}--- CLEANING STR_NAME ---{ANSI_RESET}")
+            print(f"ORIGINAL: {original}")
+            cleaned = clean_str_name(original)
+            df.at[idx, str_col] = cleaned
+        if suburb_col:
+            original_s = df.at[idx, suburb_col]
+            print(f"{ANSI_CYAN}--- CLEANING SUBURB ---{ANSI_RESET}")
+            print(f"ORIGINAL: {original_s}")
+            cleaned_s = clean_suburb(original_s)
+            df.at[idx, suburb_col] = cleaned_s
+
+    print(f"{ANSI_CYAN}Preview AFTER cleanup:{ANSI_RESET}")
+    if preview_cols:
+        print(df[preview_cols].head().to_string())
+        print()
+
+    # Write back
+    try:
+        with engine.begin() as conn:
+            conn.execute(sql_text(f"TRUNCATE TABLE `{TABLE_NAME}`"))
+            df.to_sql(TABLE_NAME, conn, if_exists="append", index=False)
+        print(f"{ANSI_CYAN}Wrote {len(df)} cleaned rows back to `{TABLE_NAME}`{ANSI_RESET}")
+    except Exception as e:
+        print(f"{ANSI_RED}Failed to write cleaned data: {e}{ANSI_RESET}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

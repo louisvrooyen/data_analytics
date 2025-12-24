@@ -1,92 +1,229 @@
-﻿import re
+﻿# cleaning_logic.py
 
-# === SYMBOL REPLACEMENTS ===
-_symbol_map = {
-    "@": "a",
-    "0": "o",
-    "^": "i",
-    "#": "e",
-    "'S": "'s",
-    "Streetr": "Street",
-    "Avenuenue": "Avenue",
-    "(R1O": "(R10",
-    "(R31O": "(R310",
-    "1O": "10",
-}
+import re
 
-# === SUFFIX FIXES ===
-_suffix_map = {
-    "rd": "Road",
-    "st": "Street",
-    "str": "Street",
-    "ave": "Avenue",
-    "cl": "Close",
-    "ter": "Terrace",
-    "cr": "Crescent",
-    "cir": "Circle",
-    "sq": "Square",
-    "blvd": "Boulevard",
-    "la": "Lane",
-    "dr": "Drive",
-    "ext": "Extension",
-    "pl": "Place",
-    "wk": "Walk",
-    "ct": "Court",
-}
+# ANSI colors (normal intensity)
+ANSI_RESET = "\033[0m"
+ANSI_CYAN = "\033[36m"
+ANSI_YELLOW = "\033[33m"
+ANSI_GREEN = "\033[32m"
+ANSI_MAGENTA = "\033[35m"
+ANSI_RED = "\033[31m"
 
-# Full words we should NOT re-expand
-_full_words = {"street","avenue","road","drive","lane","boulevard","court","place","terrace","crescent","circle","square","close","extension","walk"}
+# -------------------------
+# Debug helpers (Phase 5 only)
+# -------------------------
 
-# Ordinals we want to preserve exactly
-_ordinals = {
-    "1st","2nd","3rd","4th","5th","6th","7th","8th","9th",
-    "10th","11th","12th","13th","14th","15th","16th","17th",
-    "35th","51st"
-}
+def dbg_header(phase_name):
+    print(f"{ANSI_CYAN}-------------------------{ANSI_RESET}")
+    print(f"{ANSI_CYAN}{phase_name}{ANSI_RESET}")
 
-def proper_case(value: str) -> str:
-    """Convert to proper case (title case), preserving ordinals."""
-    words = value.split()
-    fixed = []
-    for w in words:
-        lw = w.lower()
-        if lw in _ordinals:
-            fixed.append(lw)  # keep ordinal exactly
-        else:
-            fixed.append(w.capitalize())
-    return " ".join(fixed)
+def dbg_before(text):
+    print(f"{ANSI_YELLOW}BEFORE:{ANSI_RESET} {text}")
 
-def replace_symbols(value: str) -> str:
-    """Replace common symbol substitutions safely (case-insensitive)."""
-    txt = value
-    for bad, good in _symbol_map.items():
-        pattern = re.compile(re.escape(bad), flags=re.IGNORECASE)
-        txt = pattern.sub(good, txt)
-    return txt
+def dbg_after(text):
+    print(f"{ANSI_GREEN}AFTER:{ANSI_RESET} {text}")
+    print()
 
-def fix_suffixes(value: str) -> str:
-    """Replace suffix abbreviations with full words (case-insensitive), skip full words."""
-    words = value.split()
-    fixed = []
-    for w in words:
-        lw = w.lower()
-        if lw in _full_words:
-            fixed.append(w)  # already a full word, leave it
-        elif lw in _suffix_map:
-            fixed.append(_suffix_map[lw])
-        else:
-            fixed.append(w)
-    return " ".join(fixed)
+def dbg_rule(rule_desc, before, after):
+    print(f"{ANSI_MAGENTA}RULE MATCHED:{ANSI_RESET} {rule_desc}")
+    print(f"{ANSI_YELLOW}  BEFORE:{ANSI_RESET} {before}")
+    print(f"{ANSI_GREEN}  AFTER:{ANSI_RESET} {after}")
+    print()
 
-def clean_text(value: str) -> str:
-    """Full cleaning pipeline for a single string."""
-    if not value or str(value).strip() == "":
-        return None
-    txt = str(value).strip()
-    # Step 1: Replace symbols inline
-    txt = replace_symbols(txt)
-    # Step 2: Fix suffixes (skip full words)
-    txt = fix_suffixes(txt)
-    # Step 3: Proper Case at the end
-    txt = proper_case(txt)
-    return txt
+# -------------------------
+# Helper: case-insensitive literal replace
+# -------------------------
+
+def _ci_replace(text, old, new):
+    pattern = re.compile(re.escape(old), flags=re.IGNORECASE)
+    return pattern.sub(new, text)
+
+# -------------------------
+# Phase 1 -- NO DEBUG
+# -------------------------
+
+def phase1_symbols(text):
+    t = text
+    t = re.sub(r"\s{2,}", " ", t)
+    t = re.sub(r"\s*,\s*", ", ", t)
+    return t
+
+# -------------------------
+# Phase 2 -- NO DEBUG
+# -------------------------
+
+def phase2_suffixes(text):
+    t = text
+    t = re.sub(r"\bRd\b", "Road", t, flags=re.IGNORECASE)
+    t = re.sub(r"\bSt\b", "Street", t, flags=re.IGNORECASE)
+    return t
+
+# -------------------------
+# Phase 3 -- NO DEBUG
+# -------------------------
+
+def phase3_propercase(text):
+    def proper_word(w):
+        if not w:
+            return w
+        return w[0].upper() + w[1:].lower()
+    return " ".join(proper_word(w) for w in text.split())
+
+# -------------------------
+# Phase 4 -- NO DEBUG
+# -------------------------
+
+def phase4_prefixes(text):
+    return re.sub(r"\bN\b", "North", text, flags=re.IGNORECASE)
+
+# -------------------------
+# Phase 5 -- DEBUG ENABLED
+# -------------------------
+
+def phase5_literals(text):
+    dbg_header("PHASE 5 -- LITERAL / SPECIAL-CASE FIXES")
+    dbg_before(text)
+
+    t = text
+
+    # (m ==> (M
+    new_t = re.sub(r"\(m", "(M", t, flags=re.IGNORECASE)
+    if new_t != t:
+        dbg_rule("(m ==> (M", t, new_t)
+        t = new_t
+
+    # (n ==> (N
+    new_t = re.sub(r"\(n", "(N", t, flags=re.IGNORECASE)
+    if new_t != t:
+        dbg_rule("(n ==> (N)", t, new_t)
+        t = new_t
+
+    # (r ==> (R
+    new_t = re.sub(r"\(r", "(R", t, flags=re.IGNORECASE)
+    if new_t != t:
+        dbg_rule("(r ==> (R)", t, new_t)
+        t = new_t
+
+    # -------------------------
+    # NEW Mt.<letter> RULE
+    # -------------------------
+    new_t = re.sub(
+        r"\bMt\.([a-z])",
+        lambda m: "Mt." + m.group(1).upper(),
+        t,
+        flags=re.IGNORECASE
+    )
+    if new_t != t:
+        dbg_rule("Mt.<letter> ==> Mt.<Uppercase letter>", t, new_t)
+        t = new_t
+
+    # -------------------------
+    # NEW RULES (24/12/2025)
+    # -------------------------
+
+    # (Mi2) ==> (M12)
+    new_t = re.sub(r"\(mi2\)", "(M12)", t, flags=re.IGNORECASE)
+    if new_t != t:
+        dbg_rule("(Mi2) ==> (M12)", t, new_t)
+        t = new_t
+
+    # (Ni) ==> (N1)
+    new_t = re.sub(r"\(ni\)", "(N1)", t, flags=re.IGNORECASE)
+    if new_t != t:
+        dbg_rule("(Ni) ==> (N1)", t, new_t)
+        t = new_t
+
+    # N2/m3 ==> N2/M3
+    new_t = re.sub(r"\bN2/m3\b", "N2/M3", t, flags=re.IGNORECASE)
+    if new_t != t:
+        dbg_rule("N2/m3 ==> N2/M3", t, new_t)
+        t = new_t
+
+    # Ni ==> N1 (standalone)
+    new_t = re.sub(r"\bNi\b", "N1", t, flags=re.IGNORECASE)
+    if new_t != t:
+        dbg_rule("Ni ==> N1", t, new_t)
+        t = new_t
+
+    # Pres.brand ==> Pres.Brand
+    new_t = _ci_replace(t, "Pres.brand", "Pres.Brand")
+    if new_t != t:
+        dbg_rule("Pres.brand ==> Pres.Brand", t, new_t)
+        t = new_t
+
+    # Pres.steyn ==> Pres.Steyn
+    new_t = _ci_replace(t, "Pres.steyn", "Pres.Steyn")
+    if new_t != t:
+        dbg_rule("Pres.steyn ==> Pres.Steyn", t, new_t)
+        t = new_t
+
+    # -------------------------
+    # Existing literal rules
+    # -------------------------
+
+    new_t = _ci_replace(t, "Pres.reitz Street", "Pres.Reitz Street")
+    if new_t != t:
+        dbg_rule("Pres.reitz Street ==> Pres.Reitz Street", t, new_t)
+        t = new_t
+
+    new_t = _ci_replace(t, "D.f.malan", "D.F. Malan")
+    if new_t != t:
+        dbg_rule("D.f.malan ==> D.F. Malan", t, new_t)
+        t = new_t
+
+    new_t = _ci_replace(t, "Stormvoel", "Stormvoel")
+    if new_t != t:
+        dbg_rule("Stormvoel ==> Stormvoel", t, new_t)
+        t = new_t
+
+    dbg_after(t)
+    return t
+
+# -------------------------
+# Phase 6 -- NO DEBUG
+# -------------------------
+
+def phase6_ordinals(text):
+    return re.sub(
+        r"\b([0-9]+)(St|Nd|Rd|Th)\b",
+        lambda m: m.group(1) + m.group(2).lower(),
+        text,
+        flags=re.IGNORECASE
+    )
+
+# -------------------------
+# Phase 7 -- NO DEBUG
+# -------------------------
+
+def phase7_finalize(text):
+    return text.strip()
+
+# -------------------------
+# Public API
+# -------------------------
+
+def clean_str_name(text):
+    t = text if text is not None else ""
+
+    # Correct pipeline order
+    t = phase1_symbols(t)
+    t = phase2_suffixes(t)
+    t = phase3_propercase(t)
+    t = phase4_prefixes(t)
+    t = phase5_literals(t)   # ONLY PHASE WITH DEBUG
+    t = phase6_ordinals(t)
+    t = phase7_finalize(t)
+
+    return t
+
+def clean_suburb(text):
+    t = text if text is not None else ""
+    t = t.strip()
+
+    def proper_word(w):
+        if not w:
+            return w
+        return w[0].upper() + w[1:].lower()
+
+    return " ".join(proper_word(w) for w in t.split())

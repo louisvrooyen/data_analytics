@@ -2,8 +2,8 @@
 # UTF-8
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=(1,0,10,0),
-    prodvers=(1,0,10,0),
+    filevers=(1,0,19,0),
+    prodvers=(1,0,19,0),
     mask=0x3f,
     flags=0x0,
     OS=0x40004,
@@ -18,11 +18,11 @@ VSVersionInfo(
         [
           StringStruct('CompanyName', 'Sysman Group'),
           StringStruct('FileDescription', 'Dashboard Launcher'),
-          StringStruct('FileVersion', '1.0.10'),
+          StringStruct('FileVersion', '1.0.19'),
           StringStruct('InternalName', 'Dashboard'),
           StringStruct('OriginalFilename', 'Dashboard.exe'),
           StringStruct('ProductName', 'Dashboard'),
-          StringStruct('ProductVersion', '1.0.10')
+          StringStruct('ProductVersion', '1.0.19')
         ]
       )
     ]),
